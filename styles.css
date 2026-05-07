@@ -1,0 +1,522 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+:root {
+    --nintendo-red: #E60012;
+    --nintendo-red-dark: #C40010;
+    --bg-color: #F8F9FA;
+    --card-bg: #FFFFFF;
+    --text-main: #2D2D2D;
+    --text-muted: #6E6E6E;
+    --border-radius: 16px;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Encabezado */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--nintendo-red);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.logo-text {
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    color: var(--text-main);
+}
+
+.logo-text span {
+    color: var(--nintendo-red);
+}
+
+/* Estructura principal */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+}
+
+@media (max-width: 900px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Formularios y controles */
+.card {
+    background: var(--card-bg);
+    padding: 32px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+h2 {
+    margin-bottom: 24px;
+    font-weight: 700;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+input,
+select {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 2px solid #EEE;
+    font-size: 15px;
+    transition: var(--transition);
+    outline: none;
+    background: #F9F9F9;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--nintendo-red);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(230, 0, 18, 0.1);
+}
+
+.image-preview-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #F0F0F0;
+    border-radius: 12px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px dashed #DDD;
+    position: relative;
+}
+
+.image-preview-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-placeholder {
+    color: #AAA;
+    text-align: center;
+    font-size: 14px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--nintendo-red);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--nintendo-red-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(230, 0, 18, 0.2);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #EEE;
+    color: var(--text-main);
+}
+
+.btn-outline:hover {
+    background: #F5F5F5;
+    border-color: #DDD;
+}
+
+/* Vista previa de la factura (Estilo Nintendo) */
+.preview-sticky {
+    position: sticky;
+    top: 40px;
+}
+
+.invoice-frame {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.invoice-header {
+    background: var(--nintendo-red);
+    color: white;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.invoice-header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.invoice-body {
+    padding: 40px;
+}
+
+.game-info-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.invoice-game-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.invoice-main-details h3 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+.platform-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #EEE;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.platform-switch1 {
+    color: #E60012;
+    background: #FFE6E8;
+}
+
+.platform-switch2 {
+    color: #00AEEF;
+    background: #E6F7FF;
+}
+
+.invoice-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    border-top: 1px solid #EEE;
+    padding-top: 24px;
+}
+
+.meta-item label {
+    display: block;
+    font-size: 12px;
+    color: #AAA;
+    margin-bottom: 2px;
+}
+
+.meta-item span {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.price-box {
+    margin-top: 30px;
+    background: #F8F9FA;
+    padding: 24px;
+    border-radius: 16px;
+    text-align: right;
+}
+
+.price-box label {
+    display: block;
+    font-size: 14px;
+}
+
+.price-amount {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--nintendo-red);
+}
+
+/* Estilos específicos para el Voucher de Canje */
+.voucher-key {
+    background: #000;
+    color: #fdfeff;
+    font-family: monospace;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    border: 2px solid #333;
+}
+
+/* Pestañas de navegación */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    background: #EEE;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    background: var(--nintendo-red);
+    color: white;
+}
+
+/* Estilos para impresión (PDF) */
+@media print {
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+
+    body {
+        background: white !important;
+        margin: 0;
+        padding: 20mm; /* Margen limpio para evitar que se imprima la URL del navegador */
+        -webkit-print-color-adjust: exact; /* Forzar colores de fondo en Chrome, Safari y Edge */
+        print-color-adjust: exact;         /* Forzar colores de fondo en Firefox */
+    }
+
+    .container {
+        margin: 0;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    header,
+    .card,
+    .tabs,
+    .btn-group-main,
+    .header-actions {
+        display: none !important;
+    }
+
+    .main-grid {
+        display: block;
+    }
+
+    .preview-sticky {
+        position: static;
+    }
+
+    .invoice-header {
+        background-color: var(--nintendo-red) !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    #voucher-view .invoice-header {
+        background-color: #000 !important;
+    }
+
+    .platform-badge {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .platform-switch1 { background-color: #FFE6E8 !important; color: #E60012 !important; }
+    .platform-switch2 { background-color: #E6F7FF !important; color: #00AEEF !important; }
+
+    .invoice-frame {
+        box-shadow: none;
+        border: 1px solid #EEE;
+        page-break-inside: avoid;
+    }
+}
+
+/* Modal de Búsqueda */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+    padding: 20px 30px;
+    border-bottom: 1px solid #EEE;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #AAA;
+}
+
+.modal-body {
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.result-item {
+    aspect-ratio: 1/1;
+    background: #F5F5F5;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: var(--transition);
+}
+
+.result-item:hover {
+    transform: scale(1.03);
+    border-color: var(--nintendo-red);
+}
+
+.result-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-loading, .search-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    font-weight: 600;
+}
+
+/* Animaciones y transiciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.invoice-frame {
+    animation: fadeIn 0.5s ease-out;
+}

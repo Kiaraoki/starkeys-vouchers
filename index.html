@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarKeys</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">★</div>
+                <div class="logo-text">Star<span>Keys</span></div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="window.print()">
+                    <span>🖨️</span> Imprimir / Guardar PDF
+                </button>
+            </div>
+        </header>
+
+        <main class="main-grid">
+            <!-- Formulario de Entrada -->
+            <section class="form-container">
+                <div class="card">
+                    <h2><span>🎮</span> Datos de la Orden</h2>
+
+                    <div class="form-group">
+                        <label for="order-num">Número de Orden</label>
+                        <input type="text" id="order-num" placeholder="Ej: #12345" value="#0001">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="game-name">Nombre del Juego</label>
+                        <input type="text" id="game-name" placeholder="Ej: The Legend of Zelda: Tears of the Kingdom">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="buyer-name">Nombre del Comprador</label>
+                        <input type="text" id="buyer-name" placeholder="Ej: Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="platform">Plataforma</label>
+                        <select id="platform">
+                            <option value="switch1">Nintendo Switch 1</option>
+                            <option value="switch2">Nintendo Switch 2</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Monto (GTQ)</label>
+                        <input type="number" id="amount" placeholder="Ej: 450.00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-key">Clave del Producto (Opcional)</label>
+                        <input type="text" id="product-key" placeholder="Ej: XXXX-XXXX-XXXX-XXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="voucher-note">Nota de Canje (Voucher)</label>
+                        <input type="text" id="voucher-note" placeholder="Ej: Sigue las instrucciones en la eShop"
+                            value="Sigue las instrucciones en la eShop">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Imagen del Juego</label>
+                        <input type="text" id="img-url" placeholder="Pegar URL de imagen (opcional)"
+                            style="margin-bottom: 10px;">
+                        <div class="btn-group" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button type="button" class="btn btn-outline" style="flex: 1;"
+                                onclick="document.getElementById('file-upload').click()">
+                                Subir Archivo
+                            </button>
+                            <button type="button" class="btn btn-primary" style="flex: 1;" id="btn-open-search">
+                            Buscador de Imágenes
+                        </button>
+                    </div>
+                    <input type="file" id="file-upload" hidden accept="image/*">
+                    <div class="image-preview-container" id="img-preview-box">
+                        <div class="image-placeholder">Vista previa de imagen</div>
+                        <img id="game-img-preview" src="" alt="" style="display: none;">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal de Búsqueda de Imágenes -->
+            <div id="search-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3><span>🔍</span> Buscar Portada</h3>
+                        <button id="close-modal" class="close-btn">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-bar">
+                            <input type="text" id="modal-search-input" placeholder="Nombre del juego...">
+                            <button id="modal-search-btn" class="btn btn-primary">Buscar</button>
+                        </div>
+                        <div id="search-results" class="results-grid">
+                            <!-- Las imágenes aparecerán aquí -->
+                            <div class="search-loading" style="display: none;">Buscando imágenes...</div>
+                            <div class="search-empty">Escribe el nombre del juego y presiona buscar.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista Previa de Factura -->
+            <section class="preview-container">
+                <div class="preview-sticky">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="invoice">Factura</button>
+                        <button class="tab-btn" data-tab="voucher">Canje de Clave</button>
+                    </div>
+
+                    <!-- Template de Factura -->
+                    <div id="invoice-view" class="invoice-frame">
+                        <div class="invoice-header">
+                            <div style="font-size: 12px; opacity: 0.8; text-transform: uppercase; font-weight: 800;">
+                                Recibo Oficial</div>
+                            <h1 style="font-size: 24px; font-weight: 800;">StarKeys Digital</h1>
+                            <div id="display-order-num" style="font-size: 14px; margin-top: 5px;">#0001</div>
+                        </div>
+
+                        <div class="invoice-body">
+                            <div class="game-info-row">
+                                <img id="display-img" class="invoice-game-img"
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23eee'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23aaa'%3EJuego%3C/text%3E%3C/svg%3E"
+                                    alt="Game Cover">
+                                <div class="invoice-main-details">
+                                    <span id="display-platform" class="platform-badge platform-switch1">Nintendo Switch
+                                        1</span>
+                                    <h3 id="display-game-name">Nombre del Juego</h3>
+                                    <p style="font-size: 14px; color: var(--text-muted);">Formato Digital - Entrega
+                                        10min a 1h</p>
+                                </div>
+                            </div>
+
+                            <div class="invoice-meta">
+                                <div class="meta-item">
+                                    <label>Cliente</label>
+                                    <span id="display-buyer">---</span>
+                                </div>
+                                <div class="meta-item">
+                                    <label>Fecha</label>
+                                    <span id="display-date">07/05/2026</span>
+                                </div>
+                            </div>
+
+                            <div class="price-box">
+                                <label>Total Pagado</label>
+                                <div class="price-amount">Q <span id="display-amount">0.00</span></div>
+                            </div>
+
+                            <div
+                                style="margin-top: 30px; text-align: center; border-top: 2px dashed #EEE; padding-top: 20px;">
+                                <p style="font-size: 12px; color: #AAA; font-weight: 600;">¡Gracias por tu compra en
+                                    StarKeys!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Template de Canje (Voucher) -->
+                    <div id="voucher-view" class="invoice-frame" style="display: none;">
+                        <div class="invoice-header" style="background: #000;">
+                            <div style="font-size: 12px; opacity: 0.8; text-transform: uppercase; font-weight: 800;">
+                                Voucher de Canje</div>
+                            <h1 style="font-size: 24px; font-weight: 800; color: #FFF;">Código de Producto</h1>
+                        </div>
+
+                        <div class="invoice-body">
+                            <div class="game-info-row">
+                                <img id="voucher-display-img" class="invoice-game-img"
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23eee'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='14' fill='%23aaa'%3EJuego%3C/text%3E%3C/svg%3E"
+                                    alt="Game Cover">
+                                <div class="invoice-main-details">
+                                    <h3 id="voucher-display-game-name" style="font-size: 20px;">Nombre del Juego</h3>
+                                    <p id="display-voucher-note" style="font-size: 14px; color: var(--text-muted);">
+                                        Sigue las instrucciones en la eShop</p>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 20px;">
+                                <label
+                                    style="font-size: 12px; font-weight: 800; color: #666; text-transform: uppercase;">Tu
+                                    código de descarga:</label>
+                                <div id="display-key" class="voucher-key">XXXX-XXXX-XXXX-XXXX</div>
+                            </div>
+
+                            <div
+                                style="margin-top: 30px; background: #F0F0F0; padding: 15px; border-radius: 12px; font-size: 13px;">
+                                <strong>Cómo canjear:</strong>
+                                <ol style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Cambia la región de tu cuenta a la indicada.</li>
+                                    <li>Abre la Nintendo Eshop en tu consola.</li>
+                                    <li>Busca el apartado de canjeo de códigos.</li>
+                                    <li>Ingresa el código mostrado arriba.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
