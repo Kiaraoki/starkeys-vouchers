@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StarKeys</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2.0">
 </head>
 
 <body>
@@ -88,27 +88,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Modal de Búsqueda de Imágenes -->
-            <div id="search-modal" class="modal">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><span>🔍</span> Buscar Portada</h3>
-                        <button id="close-modal" class="close-btn">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="search-bar">
-                            <input type="text" id="modal-search-input" placeholder="Nombre del juego...">
-                            <button id="modal-search-btn" class="btn btn-primary">Buscar</button>
-                        </div>
-                        <div id="search-results" class="results-grid">
-                            <!-- Las imágenes aparecerán aquí -->
-                            <div class="search-loading" style="display: none;">Buscando imágenes...</div>
-                            <div class="search-empty">Escribe el nombre del juego y presiona buscar.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Vista Previa de Factura -->
             <section class="preview-container">
@@ -210,7 +189,28 @@
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Modal de Búsqueda de Imágenes -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><span>🔍</span> Buscar Portada</h3>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" id="modal-search-input" placeholder="Nombre del juego...">
+                    <button id="modal-search-btn" class="btn btn-primary">Buscar</button>
+                </div>
+                <div id="search-results" class="results-grid">
+                    <!-- Las imágenes aparecerán aquí -->
+                    <div class="search-loading" style="display: none;">Buscando imágenes...</div>
+                    <div class="search-empty">Escribe el nombre del juego y presiona buscar.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=2.0"></script>
 </body>
 
 </html>
