@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displays.amount.innerText = parseFloat(inputs.amount.value || 0).toFixed(2);
         displays.productKey.innerText = inputs.productKey.value || 'XXXX-XXXX-XXXX-XXXX';
         displays.voucherNote.innerText = inputs.voucherNote.value || 'Sigue las instrucciones en la eShop';
-        
+
         // Sincronizar imagen mediante URL (si el campo no está vacío)
         if (inputs.imgUrl.value.trim() !== '') {
             updateImages(inputs.imgUrl.value.trim());
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const targetTab = btn.getAttribute('data-tab');
             if (targetTab === 'invoice') {
                 views.invoice.style.display = 'block';
@@ -103,98 +103,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const btnOpenSearch = document.getElementById('btn-open-search');
-    const searchModal = document.getElementById('search-modal');
-    const closeModal = document.getElementById('close-modal');
-    const modalSearchInput = document.getElementById('modal-search-input');
-    const modalSearchBtn = document.getElementById('modal-search-btn');
-    const searchResults = document.getElementById('search-results');
+    // Lógica para descargar como PNG
+    const btnSavePng = document.getElementById('btn-save-png');
+    btnSavePng.addEventListener('click', () => {
+        // Determinar qué vista está activa
+        const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+        const targetElement = activeTab === 'invoice' ? views.invoice : views.voucher;
+        const fileName = activeTab === 'invoice' ? 'Factura' : 'Voucher';
+        const gameName = inputs.gameName.value || 'Juego';
 
-    // Lógica para abrir/cerrar el buscador de imágenes
-    btnOpenSearch.addEventListener('click', () => {
-        searchModal.classList.add('active');
-        modalSearchInput.value = inputs.gameName.value;
-        if (modalSearchInput.value) performImageSearch();
+        // Opciones para html2canvas para asegurar alta calidad y fondos correctos
+        html2canvas(targetElement, {
+            scale: 2, // Mayor calidad
+            backgroundColor: '#ffffff', // Fondo blanco para evitar transparencia
+            useCORS: true, // Importante para imágenes externas
+            logging: false,
+            onclone: (clonedDoc) => {
+                // Desactivar animaciones en el clon para evitar que se capture con opacidad 0
+                const style = clonedDoc.createElement('style');
+                style.innerHTML = '.invoice-frame { animation: none !important; opacity: 1 !important; transform: none !important; }';
+                clonedDoc.head.appendChild(style);
+            }
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `${fileName}_${gameName.replace(/[^a-z0-9]/gi, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
     });
-
-    closeModal.addEventListener('click', () => searchModal.classList.remove('active'));
-    window.addEventListener('click', (e) => { if (e.target === searchModal) searchModal.classList.remove('active'); });
-
-    // Lógica de búsqueda en el modal
-    modalSearchBtn.addEventListener('click', performImageSearch);
-    modalSearchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') performImageSearch(); });
-
-    async function performImageSearch() {
-        const query = modalSearchInput.value.trim();
-        if (!query) return;
-
-        searchResults.innerHTML = '<div class="search-loading">Obteniendo imágenes...</div>';
-
-        const searchQuery = encodeURIComponent(query + " nintendo switch box art");
-        let matches = [];
-
-        // Función auxiliar para intentar un fetch sin que rompa el código si hay error de red
-        const safeFetchHTML = async (url) => {
-            try {
-                const res = await fetch(url);
-                if (res.ok) return await res.text();
-            } catch (e) {
-                return ""; // Si el proxy está bloqueado, devolvemos vacío para intentar la siguiente opción
-            }
-            return "";
-        };
-
-        // INTENTO 1: Google Images (vía corsproxy)
-        let html = await safeFetchHTML(`https://corsproxy.io/?${encodeURIComponent('https://www.google.com/search?q=' + searchQuery + '&tbm=isch')}`);
-        
-        // INTENTO 2: Google Images (vía allorigins)
-        if (!html || (!html.includes('gstatic.com') && !html.includes('data:image'))) {
-            html = await safeFetchHTML(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.google.com/search?q=' + searchQuery + '&tbm=isch')}`);
-        }
-
-        // Extraer de Google
-        if (html) {
-            const tbnMatches = html.match(/https:\/\/encrypted-tbn[0-9]\.gstatic\.com\/images\?q=tbn:[^"&' \\]+/g) || [];
-            const b64Matches = html.match(/data:image\/(?:jpeg|png|gif|webp);base64,[a-zA-Z0-9+/=]+/g) || [];
-            matches = [...new Set([...tbnMatches, ...b64Matches])];
-        }
-
-        // Si Google falló o no dio resultados (Captcha), activamos automáticamente el Plan B
-        if (matches.length === 0) {
-            searchResults.innerHTML = '<div class="search-loading">Google no respondió. Intentando servidor alternativo...</div>';
-            
-            // INTENTO 3: Bing Images (Misma calidad, sin captchas) vía allorigins
-            let bingHtml = await safeFetchHTML(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.bing.com/images/search?q=' + searchQuery)}`);
-            
-            // INTENTO 4: Bing Images vía corsproxy
-            if (!bingHtml || !bingHtml.includes('tse1.mm.bing.net')) {
-                bingHtml = await safeFetchHTML(`https://corsproxy.io/?${encodeURIComponent('https://www.bing.com/images/search?q=' + searchQuery)}`);
-            }
-
-            if (bingHtml) {
-                let bingMatches = [...new Set(bingHtml.match(/https:\/\/tse[0-9]\.mm\.bing\.net\/th\?id=[^"&']+/g) || [])];
-                matches = bingMatches.map(url => url + "&w=400&h=400&c=7");
-            }
-        }
-
-        // Mostrar resultados
-        if (matches.length > 0) {
-            searchResults.innerHTML = '';
-            matches.slice(0, 16).forEach(url => {
-                const div = document.createElement('div');
-                div.className = 'result-item';
-                div.innerHTML = `<img src="${url}" loading="lazy">`;
-                div.onclick = () => {
-                    updateImages(url);
-                    searchModal.classList.remove('active');
-                };
-                searchResults.appendChild(div);
-            });
-        } else {
-            searchResults.innerHTML = '<div class="search-empty">Tu navegador o antivirus están bloqueando las conexiones seguras, o el servidor rechazó la solicitud. Por favor, sube la imagen manualmente.</div>';
-        }
-    }
-
 
     function updateImages(src) {
         imgPreview.src = src;
